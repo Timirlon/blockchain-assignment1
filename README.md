@@ -17,9 +17,9 @@ Functionality of the project mainly consists of the implementation of three foll
 - Remix IDE
 
 ## Screenshots of Demo
-()
+![](media/remix-screen1.png)
 
-## DEVELOPMENT TEAM
+## Development Team
 - Temirlan Turgimbayev
 - Amirkhan Turgimbayev
 - Aslan Koyshigulov
