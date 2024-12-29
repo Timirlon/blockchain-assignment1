@@ -23,3 +23,6 @@ Functionality of the project mainly consists of the implementation of three foll
 - Temirlan Turgimbayev
 - Amirkhan Turgimbayev
 - Aslan Koyshigulov
+
+## Link to the GitHub Pages
+https://timirlon.github.io/blockchain-assignment1/
