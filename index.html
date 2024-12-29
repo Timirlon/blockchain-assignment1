@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Smart Contract Interaction</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+</head>
+<body>
+    <div class="main">
+        <h1>Smart Contract Interaction</h1>
+
+        <div class="info">
+            <p><strong>Contract Address:</strong> <span id="contractAddress"></span></p>
+            <p><strong>Owner Address:</strong> <span id="ownerAddress"></span></p>
+            <p><strong>Contract Balance:</strong> <span id="contractBalance">0</span> ETH</p>
+            <p><strong>MetaMask Account Balance:</strong> <span id="accountBalance">0</span> ETH</p>
+        </div>
+
+        <div class="buttons">
+            <button id="connectMetaMask" onclick="connectToMetaMask()">Connect MetaMask</button>
+            <button id="sendEther" onclick="sendEther()">Send Ether</button>
+            <button id="withdrawEther" onclick="withdrawFunds()">Withdraw Ether</button>
+            <button id="showBalance" onclick="showAccountBalance()">Show Balance</button>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="amount" placeholder="Amount in ETH">
+        </div>
+    </div>
+
+    <script>
+        const contractABI = [
+            {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "stateMutability": "payable",
+                "type": "receive"
+            },
+            {
+                "inputs": [],
+                "name": "getBalance",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ];
+    
+        const contractAddress = "<YOUR_CONTRACT_ADDRESS>"; // Replace with your deployed contract address
+        let web3;
+        let contract;
+        let selectedAccount;
+    
+        window.onload = async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                console.log("MetaMask is installed!");
+                web3 = new Web3(window.ethereum);
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+    
+                document.getElementById("contractAddress").innerText = contractAddress;
+    
+                // Get owner address
+                const owner = await contract.methods.owner().call();
+                document.getElementById("ownerAddress").innerText = owner;
+    
+                // Update contract balance
+                updateContractBalance();
+            } else {
+                alert("MetaMask is not installed. Please install it to use this dApp.");
+            }
+        };
+    
+        async function connectToMetaMask() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    // Request account access
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    selectedAccount = accounts[0];
+                    console.log('Connected Account:', selectedAccount);
+    
+                    // Update MetaMask account balance
+                    updateAccountBalance();
+    
+                    alert("Connected to MetaMask!");
+                } catch (error) {
+                    console.error('MetaMask connection error:', error);
+                    alert("MetaMask connection denied. Please try again.");
+                }
+            } else {
+                alert("MetaMask is not installed. Please install it to continue.");
+            }
+        }
+    
+        async function updateContractBalance() {
+            const balance = await contract.methods.getBalance().call();
+            document.getElementById("contractBalance").innerText = web3.utils.fromWei(balance, "ether");
+        }
+    
+        async function updateAccountBalance() {
+            if (!selectedAccount) return;
+            const balance = await web3.eth.getBalance(selectedAccount);
+            document.getElementById("accountBalance").innerText = web3.utils.fromWei(balance, "ether");
+        }
+    
+        async function showAccountBalance() {
+            if (!selectedAccount) {
+                alert("Please connect to MetaMask first.");
+                return;
+            }
+    
+            try {
+                const balance = await web3.eth.getBalance(selectedAccount);
+                const balanceInEth = web3.utils.fromWei(balance, "ether");
+                alert(`MetaMask Account Balance: ${balanceInEth} ETH`);
+            } catch (error) {
+                console.error("Error fetching account balance:", error);
+                alert("Failed to fetch account balance. Please try again.");
+            }
+        }
+    
+        async function sendEther() {
+            if (!selectedAccount) {
+                alert("Please connect to MetaMask first.");
+                return;
+            }
+    
+            const amount = document.getElementById("amount").value;
+    
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount.");
+                return;
+            }
+    
+            web3.eth.sendTransaction({
+                from: selectedAccount,
+                to: contractAddress,
+                value: web3.utils.toWei(amount, "ether")
+            }).then(() => {
+                alert("Transaction successful!");
+                updateContractBalance();
+                updateAccountBalance();
+            }).catch((err) => {
+                console.error(err);
+                alert("Transaction failed.");
+            });
+        }
+    
+        async function withdrawFunds() {
+            if (!selectedAccount) {
+                alert("Please connect to MetaMask first.");
+                return;
+            }
+    
+            contract.methods.withdraw().send({ from: selectedAccount }).then(() => {
+                alert("Withdrawal successful!");
+                updateContractBalance();
+                updateAccountBalance();
+            }).catch((err) => {
+                console.error(err);
+                alert("Withdrawal failed.");
+            });
+        }
+    </script>
+</body>
+</html>
+
