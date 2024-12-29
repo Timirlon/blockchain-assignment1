@@ -17,7 +17,7 @@ Functionality of the project mainly consists of the implementation of three foll
 - Remix IDE
 
 ## Screenshots of Demo
-![](https://github.com/Timirlon/dump/blob/main/blockchain-aitu/trimester-1/assignment-1/screenshots/remix-screen-1.png)
+![](https://github.com/Timirlon/dump/blob/main/blockchain-uni/screenshots/remix-screen-1.png)
 
 ## Development Team
 - Temirlan Turgimbayev
