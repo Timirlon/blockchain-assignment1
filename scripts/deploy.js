@@ -7,7 +7,7 @@ const web3 = new Web3('http://127.0.0.1:8545/');
 const bytecodePath = path.join(__dirname, 'MyContractBytecode.bin');
 const bytecode = fs.readFileSync(bytecodePath, 'utf8');
 
-const abi = require('./MyContractAbi.json');
+const abi = require('../utils/MyContractAbi.json');
 const myContract = new web3.eth.Contract(abi);
 myContract.handleRevert = true;
 

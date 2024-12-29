@@ -1,13 +1,25 @@
-# Sample Hardhat Project
+# BLOCKCHAIN ASSIGNMENT 1
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+## Project Description
+This project involves developing a smart contract solution as part of the assignment for learning and practicing blockchain technologies. The tasks include creating a smart contract, deploying it to Ganache, and interacting with it using Web3.js integrated with MetaMask.
 
-Try running some of the following tasks:
+## Functionality
+Functionality of the project mainly consists of the implementation of three following methods:
+- receive() - receive Ether
+- getBalance() - check wallet balance
+- withdraw() - withdraw all Ether
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
+## Technologies used
+- Solidity
+- Web3.js
+- Ganache
+- Metamask
+- Remix IDE
+
+## Screenshots of Demo
+()
+
+## DEVELOPMENT TEAM
+- Temirlan Turgimbayev
+- Amirkhan Turgimbayev
+- Aslan Koyshigulov
